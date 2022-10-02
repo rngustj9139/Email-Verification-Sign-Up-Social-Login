@@ -49,13 +49,13 @@ public class MailSendService {
             sendMail.setSubject("회원가입 이메일 인증"); // 메일 제목
             sendMail.setText(new StringBuffer().append("<h1>[이메일 인증]</h1>") // 메일 내용
                     .append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>")
-                    .append("<a href='http://localhost:9080/member/signUpConfirm?email=")
+                    .append("<a href='http://localhost:8080/member/signUpConfirm?email=")
                     .append(email)
                     .append("&authKey=")
                     .append(authKey)
                     .append("' target='_blenk'>이메일 인증 확인</a>")
                     .toString());
-            sendMail.setFrom("ninexxxwest@gmail.com", "관리자"); // 메일 송신자
+            sendMail.setFrom("ninexxxwest@gmail.com", "소분소분 관리자"); // 메일 송신자
             sendMail.setTo(email); // 메일 수신자
             sendMail.send();
         } catch (MessagingException e) {

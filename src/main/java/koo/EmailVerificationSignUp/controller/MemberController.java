@@ -10,9 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class MemberController {
     }
 
     @PostMapping("/register/member") // 회원가입 POST
-    public String registerMember(@Validated @ModelAttribute MemberRegisterRequestDto memberRegisterRequestDto, BindingResult bindingResult) {
+    public String registerMember(@Validated @ModelAttribute MemberRegisterRequestDto memberRegisterRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (!memberRegisterRequestDto.getFirstPassword().equals(memberRegisterRequestDto.getSecondPassword())) {
             bindingResult.rejectValue("secondPassword", "twoPasswordNotEqual");
         }
@@ -48,6 +47,7 @@ public class MemberController {
         member.setMemberName(memberRegisterRequestDto.getMemberName());
         member.setEmail(memberRegisterRequestDto.getEmail());
         member.setPassword(memberRegisterRequestDto.getFirstPassword());
+        member.setAuthStatus(0);
         memberService.join(member);
 
         //임의의 authKey 생성 & 이메일 발송
@@ -61,7 +61,30 @@ public class MemberController {
         //DB에 authKey 업데이트
         memberService.updateAuthKey(map);
 
-        return "redirect:/register/member";
+        redirectAttributes.addAttribute("email", memberRegisterRequestDto.getEmail());
+
+        return "redirect:/register/member/preEmailSignUpConfirm/{email}";
+    }
+
+    @GetMapping("/register/member/preEmailSignUpConfirm/{email}")
+    public String preEmailSignUpConfirm(Model model, @PathVariable("email") String email) {
+        Member findedMember = memberService.findOneMemberByEmail(email);
+
+        model.addAttribute("email", findedMember.getEmail());
+        model.addAttribute("memberName", findedMember.getMemberName());
+
+        return "registerComplete";
+    }
+
+    @GetMapping("/member/signUpConfirm")
+    public String signUpConfirm(@RequestParam("email") String email, @RequestParam("authKey") String authKey) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("email", email);
+        map.put("authKey", authKey);
+
+        memberService.updateAuthStatus(map);
+
+        return "redirect:/home";
     }
 
 }

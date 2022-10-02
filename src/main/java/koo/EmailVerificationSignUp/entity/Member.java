@@ -19,5 +19,6 @@ public class Member {
     private String email;
     private String password;
     private String authKey;
+    private Integer authStatus; // 0 or 1만 가능 (0은 회원가입시 이메일 인증 안받은 회원, 1은 회원가입시 이메일 인증 받은 회원)
 
 }

@@ -23,12 +23,26 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
+    public Member findOneMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
     public void updateAuthKey(Map<String, String> map) {
         String memberEmail = map.get("email");
         String authKey = map.get("authKey");
 
         Member findedMember = memberRepository.findByEmail(memberEmail);
         findedMember.setAuthKey(authKey);
+    }
+
+    public void updateAuthStatus(Map<String, String> map) {
+        String authKey = map.get("authKey");
+        Member findedMember = memberRepository.findByEmail(map.get("email"));
+        String savedAuthKey = findedMember.getAuthKey();
+
+        if (authKey.equals(savedAuthKey)) {
+            findedMember.setAuthStatus(1);
+        }
     }
 
 }
