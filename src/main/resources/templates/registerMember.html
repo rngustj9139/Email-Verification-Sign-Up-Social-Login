@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<form th:action th:object="${memberRegisterRequestDto}" method="post">
+    <h1>#소분해요</h1>
+
+    <div th:if="${#fields.hasGlobalErrors()}">
+        <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+    </div>
+
+    <label for="memberName">이름</label>
+    <br />
+    <input type="text" id="memberName" th:field="*{memberName}" th:errorclass="field-error" />
+    <div class="field-error" th:errors="*{memberName}" />
+
+    <br />
+
+    <label for="email">이메일</label>
+    <br />
+    <input type="email" id="email" th:field="*{email}" th:errorclass="field-error" />
+    <div class="field-error" th:errors="*{email}" />
+
+    <br />
+
+    <label for="firstPassword">비밀번호</label>
+    <br />
+    <input type="password" id="firstPassword" th:field="*{firstPassword}" th:errorclass="field-error" />
+    <div class="field-error" th:errors="*{firstPassword}" />
+
+    <br />
+
+    <label for="secondPassword">비밀번호 확인</label>
+    <br />
+    <input type="password" id="secondPassword" th:field="*{secondPassword}" th:errorclass="field-error" />
+    <div class="field-error" th:errors="*{secondPassword}" />
+
+    <br />
+
+    <button type="submit">가입하기</button>
+</form>
+
+<div>
+<h2>다른 계정으로 가입</h2>
+</div>
+
+<div>
+이미 회원이시라면? <a th:onclick="|location.href='@{/login}'|">로그인</a>
+</div>
+
+</body>
+</html>
