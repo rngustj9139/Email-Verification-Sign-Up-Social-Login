@@ -1,0 +1,4 @@
+package koo.EmailVerificationSignUp.exception;
+
+public class OAuth2NotFoundException {
+}

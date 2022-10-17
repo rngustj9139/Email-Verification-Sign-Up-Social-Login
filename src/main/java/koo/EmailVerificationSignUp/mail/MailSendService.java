@@ -38,7 +38,7 @@ public class MailSendService {
         return buffer.toString();
     }
 
-    //인증메일 보내기
+    // 회원가입시 이메일 인증 메일 보내기
     public String sendAuthMail(String email) {
         //6자리 난수 인증번호 생성
         String authKey = getKey(6);

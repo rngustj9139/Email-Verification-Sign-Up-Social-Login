@@ -66,7 +66,7 @@ public class MemberController {
         return "redirect:/register/member/preEmailSignUpConfirm/{email}";
     }
 
-    @GetMapping("/register/member/preEmailSignUpConfirm/{email}")
+    @GetMapping("/register/member/preEmailSignUpConfirm/{email}") // 가입하기 버튼 누르고 난뒤 뜨는 페이지
     public String preEmailSignUpConfirm(Model model, @PathVariable("email") String email) {
         Member findedMember = memberService.findOneMemberByEmail(email);
 
@@ -76,7 +76,7 @@ public class MemberController {
         return "registerComplete";
     }
 
-    @GetMapping("/member/signUpConfirm")
+    @GetMapping("/member/signUpConfirm") // 도착 이메일에 표시되는 링크
     public String signUpConfirm(@RequestParam("email") String email, @RequestParam("authKey") String authKey) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("email", email);

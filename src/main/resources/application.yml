@@ -15,6 +15,20 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100 # OrderApiController의 orderV3.1을 위해 사용됨 => 강제 초기화로 인한 컬렉션 조회에서 order들을 가져올때 orderItems 각각의 orderItems를(100개) 쿼리 한방으로 가져온다. 데이터가 100개있고 default_batch_fetch_size가 10이면 쿼리가 10번 나간다. item도 쿼리 한방에 다 가져올 수 있다. [이건 글로벌한 설정임 구체적인 설정을 원하면 Order.class의 OrderItems의 위에 @BatchSize(size = 50) 이렇게 쓰기]
 
+  security:
+    oauth2:
+      client:
+        provider:
+        registration:
+          google:
+            client-id: 640492298975-0iv4puje979ovrm5hgvefffcqiql83jj.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+          facebook:
+            client-id: 1058063422261362
+            client-secret: 539d5dcbf8f0d98324c9174cee9de625
+            scope: email, public_profile
+
 logging:
   level:
     org.hibernate.SQL: info # 로그 레밸 설정, jpa에서 생성되는 sql이 로그를 통해서 출력됨 (show_sql은 sout으로 출력됨)
