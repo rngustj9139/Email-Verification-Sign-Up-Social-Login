@@ -1,7 +1,7 @@
 package koo.EmailVerificationSignUp.service;
 
 import koo.EmailVerificationSignUp.entity.Member;
-import koo.EmailVerificationSignUp.repositort.MemberRepository;
+import koo.EmailVerificationSignUp.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

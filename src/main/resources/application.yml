@@ -18,7 +18,6 @@ spring:
   security:
     oauth2:
       client:
-        provider:
         registration:
           google:
             client-id: 640492298975-0iv4puje979ovrm5hgvefffcqiql83jj.apps.googleusercontent.com

@@ -1,4 +1,4 @@
-package koo.EmailVerificationSignUp.controller;
+package koo.EmailVerificationSignUp.oauth2.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

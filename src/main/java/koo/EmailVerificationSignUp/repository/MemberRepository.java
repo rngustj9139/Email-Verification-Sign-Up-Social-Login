@@ -1,4 +1,4 @@
-package koo.EmailVerificationSignUp.repositort;
+package koo.EmailVerificationSignUp.repository;
 
 import koo.EmailVerificationSignUp.entity.Member;
 import lombok.RequiredArgsConstructor;
