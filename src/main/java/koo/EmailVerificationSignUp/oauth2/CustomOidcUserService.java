@@ -1,9 +1,12 @@
 package koo.EmailVerificationSignUp.oauth2;
 
+import koo.EmailVerificationSignUp.entity.Member;
+import koo.EmailVerificationSignUp.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -13,13 +16,19 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class CustomOidcUserService extends OidcUserService { // 구글 같은 경우 scope를 지정해주지 않으면 CustomOAuth2Service대신 여기 OidcService를 타게 된다
+
+    private final MemberRepository memberRepository;
 
     @SneakyThrows
     @Override
@@ -31,6 +40,28 @@ public class CustomOidcUserService extends OidcUserService { // 구글 같은 �
         String registrationId = request.getClientRegistration().getRegistrationId();
         String userNameAttributeName = request.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         OAuth2Attributes attributes = OAuth2Attributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+
+        String providerId = oAuth2User.getAttribute("sub");
+        log.info("providerId = {}", providerId);
+        String name = oAuth2User.getAttribute("name");
+        log.info("name = {}", name);
+        String email = oAuth2User.getAttribute("email");
+        log.info("email = {}", email);
+        String password = UUID.randomUUID().toString();
+        log.info("password = {}", password);
+
+        Optional<Member> findedMember = memberRepository.findByName(name);
+
+        if (!findedMember.isPresent()) {
+            Member member = new Member();
+            member.setAuthStatus(1);
+            member.setEmail(email);
+            member.setMemberName(name);
+            member.setPassword(password);
+            log.info("===member save===");
+
+            memberRepository.save(member);
+        }
 
         return (OidcUser) new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")), attributes.getAttributes(), attributes.getNameAttributeKey());
     }
